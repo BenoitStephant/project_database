@@ -1,0 +1,41 @@
+version: "3.3"
+
+services:
+  backend:
+    container_name: choose_one_backend
+    build: ./backend
+    restart: always
+    ports:
+      - "3030:5000"
+    environment:
+      FLASK_DEBUG: "on"
+      FLASK_APP: ./app.py
+    volumes:
+      - ./backend:/app
+    networks:
+      - backend
+    depends_on:
+      - database
+
+  database:
+    container_name: choose_one_database
+    image: mysql:5.7
+    restart: always
+    ports:
+      - "32000:3306"
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d/:ro
+    networks:
+      - backend
+
+networks:
+    backend:
+
+volumes:
+    database:
+    backend:
