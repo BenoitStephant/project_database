@@ -1,3 +1,5 @@
 Flask
 mysql-connector-python
 python-dotenv
+Flask-RESTful
+Flask-JWT-Extended

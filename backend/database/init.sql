@@ -16,11 +16,11 @@ CREATE TABLE IF NOT EXISTS User (
     id VARCHAR(36) NOT NULL,
     name VARCHAR(50) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    match_nb INT(4) NOT NULL,
-    average DOUBLE(40, 2) NOT NULL,
-    favorite_category_id VARCHAR(36),
-    created_at DATE NOT NULL,
-    updated_at DATE NOT NULL,
+    match_nb INT(4) DEFAULT 0 NOT NULL,
+    average DOUBLE(40, 2) DEFAULT 1 NOT NULL,
+    favorite_category_id VARCHAR(36) NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT
         PRIMARY KEY (id),
     CONSTRAINT
