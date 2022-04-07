@@ -20,6 +20,6 @@ Latest Stable Node version
 ## Run frontend
 `cd frontend`
 
-`npm install`
+`npm install yarn`
 
-`npm run serve`
+`yarn run serve`
