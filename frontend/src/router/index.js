@@ -1,4 +1,4 @@
-import HelloWorld from "@/components/HelloWorld";
+import ChoosePage from "@/components/ChoosePage";
 import RankingsPage from "@/components/RankingsPage";
 import SubmitPage from "@/components/SubmitPage";
 import LoginPage from "@/components/LoginPage";
@@ -8,7 +8,7 @@ let routes = [
     {
         path: "/",
         name: "Home",
-        component: HelloWorld
+        component: ChoosePage
     },
     {
         path: "/rankings",
