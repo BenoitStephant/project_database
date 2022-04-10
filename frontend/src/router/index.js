@@ -1,5 +1,5 @@
-import HelloWorld from "@/components/HelloWorld";
-import RankingsPage from "@/components/RankingsPage";
+import ChoosePage from "@/components/ChoosePage";
+import RankingsPage from "@/components/rankings/RankingsPage";
 import SubmitPage from "@/components/SubmitPage";
 import LoginPage from "@/components/LoginPage";
 import ProfilePage from "@/components/ProfilePage";
@@ -8,7 +8,7 @@ let routes = [
     {
         path: "/",
         name: "Home",
-        component: HelloWorld
+        component: ChoosePage
     },
     {
         path: "/rankings",
