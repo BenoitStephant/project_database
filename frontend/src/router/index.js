@@ -1,5 +1,5 @@
 import ChoosePage from "@/components/ChoosePage";
-import RankingsPage from "@/components/RankingsPage";
+import RankingsPage from "@/components/rankings/RankingsPage";
 import SubmitPage from "@/components/SubmitPage";
 import LoginPage from "@/components/LoginPage";
 import ProfilePage from "@/components/ProfilePage";
