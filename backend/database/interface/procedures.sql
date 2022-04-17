@@ -96,6 +96,41 @@ BEGIN
 
 END ;
 
+DROP FUNCTION IF EXISTS concept_count;
+CREATE FUNCTION concept_count(category_id INT)
+RETURNS INT
+DETERMINISTIC READS SQL DATA
+BEGIN
+DECLARE concept_count INT;
+SELECT count(concept_id) FROM Category_concepts Cc WHERE Cc.category_id = category_id
+INTO concept_count;
+RETURN concept_count;
+END;
+
+DROP FUNCTION IF EXISTS item_count;
+CREATE FUNCTION item_count(category_id INT)
+RETURNS INT
+DETERMINISTIC READS SQL DATA
+BEGIN
+DECLARE item_count INT;
+SELECT count(item_id) FROM Category_items Ci WHERE Ci.category_id = category_id
+INTO item_count;
+RETURN item_count;
+END;
+
+DROP PROCEDURE IF EXISTS query_item_elo;
+CREATE PROCEDURE query_item_elo(category_id INT, page_nb INT, page_size INT, reversed INT(1))
+BEGIN
+DECLARE item_size INT DEFAULT page_size * concept_count(category_id);
+DECLARE offset INT DEFAULT page_nb * item_size;
+SELECT I.id as item_id, I.name as item_name, I.description, I.image_url, C.id as concept_id, C.name as concept_name, Elo.value
+FROM (SELECT * FROM Elo E WHERE E.category_id = category_id ORDER BY CASE WHEN reversed = 0 THEN E.item_id END ASC,
+                                                                     CASE WHEN reversed != 0 THEN E.item_id END DESC,
+                                                                     E.concept_id LIMIT offset, item_size ) Elo
+INNER JOIN Item I ON Elo.item_id = I.id
+INNER JOIN Concept C ON Elo.concept_id = C.id;
+END;
+
 DROP PROCEDURE IF EXISTS get_match_log ;
 CREATE PROCEDURE get_match_log(IN user_id VARCHAR(36), IN page_nb INT, IN page_size INT)
 BEGIN
