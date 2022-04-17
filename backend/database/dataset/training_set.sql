@@ -23,7 +23,7 @@ VALUES (NULL, 'Cat', 'Goes MEOW', 'img_src', current_date()),
 (NULL, 'Chicken', 'Goes BAWK', 'img_src', current_date());
 
 INSERT INTO User
-VALUES ('aaaaa', 'Foo', 'unhashedForYourSafety', 0, 0, 1, CURRENT_DATE(), CURRENT_DATE());
+VALUES ('aaaaa', 'Foo', 'unhashedForYourSafety', 0, 0, 1, 0, 0, CURRENT_DATE(), CURRENT_DATE());
 
 call link_concept_to_category(1, 1);
 call link_concept_to_category(2, 1);
@@ -45,6 +45,5 @@ call link_item_to_category(2,1);
 call link_item_to_category(4,3);
 
 call link_item_to_category(3,1);
-call link_item_to_category(4,1);
 call link_item_to_category(4,1);
 

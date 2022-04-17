@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS User (
     username VARCHAR(50) NOT NULL,
     password VARCHAR(255) NOT NULL,
     match_played INT(4) DEFAULT 0 NOT NULL,
-    average DOUBLE(40, 2) DEFAULT 1 NOT NULL,
+    average DECIMAL(8, 7) DEFAULT 1 NOT NULL,
     favorite_category_id INT NULL,
     visible_match INT(1) DEFAULT 0 NOT NULL,
     visible_fav_category INT(1) DEFAULT 0 NOT NULL,
