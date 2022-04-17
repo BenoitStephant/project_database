@@ -7,11 +7,11 @@
 import Navigation from "./components/Navigation";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    Navigation: Navigation
-  }
-}
+    Navigation: Navigation,
+  },
+};
 </script>
 
 <style>
@@ -21,6 +21,15 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+hr {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 0;
+  border-top: 1px solid #eeeeee;
 }
 </style>
