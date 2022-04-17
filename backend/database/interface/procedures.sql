@@ -1,29 +1,3 @@
-DROP PROCEDURE IF EXISTS create_category;
-CREATE PROCEDURE create_category(IN title CHAR(30), description VARCHAR(255), image_url VARCHAR(255), OUT id INT)
-BEGIN
-   INSERT INTO Category VALUE (NULL, title, description, image_url, current_date(), current_date());
-   SET id = LAST_INSERT_ID();
-END ;
-
-DROP PROCEDURE  IF EXISTS remove_category;
-CREATE PROCEDURE remove_category(IN category_id INT)
-BEGIN
-    DELETE FROM Category WHERE Category.id = category_id;
-END;
-
-DROP PROCEDURE IF EXISTS create_concept;
-CREATE PROCEDURE create_concept(IN name VARCHAR(30), OUT id INT)
-BEGIN
-    INSERT INTO Concept VALUE (NULL, name, current_date());
-    SET id = LAST_INSERT_ID();
-END ;
-
-DROP PROCEDURE IF EXISTS remove_concept;
-CREATE PROCEDURE remove_concept(IN concept_id INT)
-BEGIN
-    DELETE FROM Concept WHERE Concept.id = concept_id;
-END;
-
 DROP PROCEDURE IF EXISTS create_item;
 CREATE PROCEDURE  create_item(IN name CHAR(30), description VARCHAR(255), image_url VARCHAR(255), OUT id INT)
 BEGIN
