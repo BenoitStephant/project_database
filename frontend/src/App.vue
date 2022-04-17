@@ -7,11 +7,11 @@
 import Navigation from "./components/Navigation";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    Navigation: Navigation
-  }
-}
+    Navigation: Navigation,
+  },
+};
 </script>
 
 <style>
@@ -27,9 +27,9 @@ export default {
   padding: 0;
 }
 hr {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    border: 0;
-    border-top: 1px solid #eeeeee;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 0;
+  border-top: 1px solid #eeeeee;
 }
 </style>

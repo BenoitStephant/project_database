@@ -1,71 +1,59 @@
 <template>
   <div class="rankings_page">
-    <div class="category_header">
-      <select
-        name="category_combobox"
-        id="categoriesBox"
-        @change="onCategoryChange($event)"
-      >
-        <option
-          v-for="category in categories"
-          :value="category.id"
-          :key="category.id"
-        >
-          {{ category.name }}
-        </option>
-      </select>
-    </div>
-    <div class="theme_header">
-      <select name="theme_combobox" id="themes" @change="onThemeChange($event)">
-        <!-- Depends on the category -->
-        <option
-          v-for="theme in categories[selectedCategory].themes"
-          :value="theme"
-          :key="theme"
-        >
-          {{ theme }}
-        </option>
-        Emotions
-      </select>
-    </div>
-    <div class="concept_table">
-      <div class="concept_table_header">
-        <div class="spacer"></div>
-        <div class="concept_table_header">Concept</div>
-        <button class="compare_button">Compare</button>
-      </div>
-      <div class="table_header">
-        <button class="item_column">Item</button>
-        <div class="table_header_separator"></div>
-        <div class="concept_headers">
-          <button
-            v-for="concept in categoryContent.concepts"
-            :value="concept.id"
-            :key="concept.id"
+    <div class="data_container">
+      <h2>All items rankings</h2>
+      <div class="filter_header">
+        <div class="category_header">
+          Choose category:
+          <select
+            name="category_combobox"
+            id="categoriesBox"
+            @change="onCategoryChange($event)"
           >
-            {{ concept.name }}
-          </button>
+            <option
+              v-for="category in categories"
+              :value="category.id"
+              :key="category.id"
+            >
+              {{ category.name }}
+            </option>
+          </select>
+        </div>
+        <div class="theme_header">
+          Choose theme:
+          <select
+            name="theme_combobox"
+            id="themes"
+            @change="onThemeChange($event)"
+          >
+            <!-- Depends on the category -->
+            <option
+              v-for="theme in categories[selectedCategory].themes"
+              :value="theme"
+              :key="theme"
+            >
+              {{ theme }}
+            </option>
+            Emotions
+          </select>
         </div>
       </div>
-      <div class="table_item_container">
-        <RankingItem
-          v-for="item in categoryContent.items"
-          :key="item.id"
-          v-bind:id="item.id"
-          v-bind:name="item.name"
-          v-bind:imgSrc="item.imgSrc"
-          v-bind:themeScores="item.themeScores"
-        />
-      </div>
+      <table-lite
+        :is-slot-mode="true"
+        :is-static-mode="true"
+        :columns="table.columns"
+        :rows="table.rows"
+        :total="table.totalRecordCount"
+        :sortable="table.sortable"
+        class="in_table"
+      ></table-lite>
     </div>
-    <div>
-    </div>
-    <div>Welcome to the rankings page</div>
   </div>
 </template>
 
 <script>
-import RankingItem from "@/components/rankings/RankingItem";
+import TableLite from "vue3-table-lite";
+import { reactive, defineComponent } from "vue";
 
 function onCategoryChange(event) {
   this.selectedCategory = this.categories.findIndex(function (item) {
@@ -89,9 +77,9 @@ function queryCategoryContentFromCategoryAndTheme(category, theme) {
   //categoryContent = queryCodeHere();
 }
 
-export default {
+export default defineComponent({
   name: "RankingsPage",
-  components: { RankingItem },
+  components: { TableLite },
   data() {
     return {
       //This should be fetched on from DB on page load
@@ -142,18 +130,95 @@ export default {
       selectedTheme: "",
     };
   },
+  setup() {
+    const data = reactive([]);
+    for (let i = 0; i < 126; i++) {
+      data.push({
+        id: i,
+        name: "TEST" + i,
+        email: "test" + i + "@example.com",
+      });
+    }
+    // Table config
+    const table = reactive({
+      columns: [
+        {
+          label: "ID",
+          field: "id",
+          width: "3%",
+          sortable: true,
+          isKey: true,
+        },
+        {
+          label: "Name",
+          field: "name",
+          width: "10%",
+          sortable: true,
+        },
+        {
+          label: "Email",
+          field: "email",
+          width: "15%",
+          sortable: true,
+        },
+      ],
+      rows: data,
+      totalRecordCount: data.length,
+      sortable: {
+        order: "id",
+        sort: "asc",
+      },
+    });
+    return {
+      table,
+    };
+  },
   methods: {
     onCategoryChange,
     onThemeChange,
   },
-};
+});
 </script>
 
 <style scoped>
 .rankings_page {
   display: flex;
   justify-content: center;
+  align-items: center;
   flex-direction: column;
-  margin-top: 25px;
+  color: white;
+}
+::v-deep(.dataTables_paginate) {
+  display: none;
+}
+.category_header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.theme_header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.filter_header {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.data_container {
+  display: block;
+  width: 75%;
+  padding: 13px 25px 25px 25px;
+  margin: 25px;
+  background-color: gray;
+  border-radius: 10px;
+  box-shadow: 5px 10px 20px -10px black;
+}
+.in_table {
+  color: black;
+  border-radius: 10px;
+  box-shadow: 0px 0px 25px -12px black;
 }
 </style>

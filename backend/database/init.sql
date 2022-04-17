@@ -126,7 +126,6 @@ CREATE TABLE IF NOT EXISTS Match_log (
         ON DELETE CASCADE
 );
 
-DELIMITER ;
 DROP TRIGGER IF EXISTS category_item_propagator ;
 CREATE TRIGGER category_item_propagator
     AFTER INSERT ON Category_items
