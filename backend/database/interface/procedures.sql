@@ -1,15 +1,3 @@
-DROP PROCEDURE IF EXISTS create_item;
-CREATE PROCEDURE  create_item(IN name CHAR(30), description VARCHAR(255), image_url VARCHAR(255), OUT id INT)
-BEGIN
-   INSERT INTO Category VALUE (NULL, title, description, image_url, current_date(), current_date());
-   SET id = LAST_INSERT_ID();
-END;
-DROP PROCEDURE IF EXISTS remove_item;
-CREATE PROCEDURE remove_item(IN item_id INT)
-BEGIN
-    DELETE FROM Item WHERE Item.id = item_id;
-END;
-
 DROP PROCEDURE IF EXISTS link_concept_to_category;
 CREATE PROCEDURE link_concept_to_category(IN concept_id INT, category_id INT)
 BEGIN
@@ -136,6 +124,7 @@ CREATE PROCEDURE get_match_log(IN user_id VARCHAR(36), IN page_nb INT, IN page_s
 BEGIN
 DECLARE offset INT DEFAULT page_nb * page_size;
 SELECT Ml.id, Ml.user_id, Ca.title, Co.name, I1.name, I2.name, Ml.elo_before0, Ml.elo_before1, Ml.winner, Ml.elo_after0, Ml.elo_after1, Ml.elo_after0 - Ml.elo_before0 AS difference, Ml.created_at
+-- Pas besoin d'ORDER BY date car les tuples sont insert dans cet ordre
 FROM (SELECT * FROM Match_log Ml WHERE Ml.user_id = user_id LIMIT offset, page_size) Ml
 INNER JOIN Elo AS Elo0 ON Ml.elo_id0 = Elo0.id
 INNER JOIN Elo as Elo1 ON Ml.elo_id1 = Elo1.id
@@ -144,3 +133,33 @@ INNER JOIN Item as I2 ON Elo1.item_id = I2.id
 INNER JOIN Concept Co on Elo0.concept_id = Co.id
 INNER JOIN Category Ca on Elo0.category_id = Ca.id;
 END ;
+
+DROP PROCEDURE IF EXISTS get_privacy;
+CREATE PROCEDURE get_privacy(IN user_id VARCHAR(36))
+BEGIN
+SELECT visible_match, visible_fav_category FROM User WHERE id = user_id;
+END;
+
+DROP PROCEDURE IF EXISTS set_privacy;
+CREATE PROCEDURE set_privacy(IN user_id VARCHAR(36), IN i_visible_match INT(1), IN i_visible_fav_category INT(1))
+BEGIN
+UPDATE User U SET U.visible_match = i_visible_match, U.visible_fav_category = i_visible_fav_category WHERE U.id = user_id;
+END;
+
+DROP PROCEDURE IF EXISTS get_user;
+CREATE PROCEDURE get_user(IN user_id VARCHAR(36))
+BEGIN
+SELECT * FROM User WHERE id = user_id;
+END;
+
+DROP PROCEDURE IF EXISTS get_categories;
+CREATE PROCEDURE get_categories()
+BEGIN
+SELECT * FROM Category;
+END;
+
+DROP PROCEDURE IF EXISTS get_favorite_category;
+CREATE PROCEDURE get_favorite_category(IN user_id VARCHAR(36))
+BEGIN
+SELECT * FROM Category WHERE id = (SELECT favorite_category_id FROM User WHERE id = user_id);
+END;
