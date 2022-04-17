@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS Category_concepts (
 );
 
 CREATE TABLE IF NOT EXISTS User (
-    id INT NOT NULL AUTO_INCREMENT,
+    id VARCHAR(36) NOT NULL,
     username VARCHAR(50) NOT NULL,
     password VARCHAR(255) NOT NULL,
     match_played INT(4) DEFAULT 0 NOT NULL,
@@ -77,15 +77,6 @@ CREATE TABLE IF NOT EXISTS Category_items (
         ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS Password (
-    user_id INT NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    CONSTRAINT
-        FOREIGN KEY (user_id)
-        REFERENCES User(id)
-        ON DELETE CASCADE
-);
-
 CREATE TABLE IF NOT EXISTS Elo (
     id INT NOT NULL AUTO_INCREMENT,
     item_id INT NOT NULL,
@@ -110,7 +101,7 @@ CREATE TABLE IF NOT EXISTS Elo (
 
 CREATE TABLE IF NOT EXISTS Match_log (
     id INT NOT NULL AUTO_INCREMENT,
-    user_id INT,
+    user_id VARCHAR(36),
     elo_id0 INT NOT NULL,
     elo_id1 INT NOT NULL,
     elo_before0 INT(4) NOT NULL,
@@ -135,8 +126,7 @@ CREATE TABLE IF NOT EXISTS Match_log (
         ON DELETE CASCADE
 );
 
-DELIMITER //
-DROP TRIGGER IF EXISTS category_item_propagator //
+DROP TRIGGER IF EXISTS category_item_propagator ;
 CREATE TRIGGER category_item_propagator
     AFTER INSERT ON Category_items
     FOR EACH ROW
@@ -144,17 +134,17 @@ BEGIN
     INSERT INTO Elo
     SELECT NULL, NEW.item_id, NEW.category_id, Cc.concept_id, 1500
     FROM (SELECT Cc.concept_id FROM Category_concepts Cc WHERE Cc.category_id = NEW.category_id) as Cc;
-END //
+END ;
 
-DROP TRIGGER IF EXISTS category_item_delinker //
+DROP TRIGGER IF EXISTS category_item_delinker ;
 CREATE TRIGGER category_item_delinker
     AFTER DELETE ON Category_items
     FOR EACH ROW
 BEGIN
     DELETE FROM Elo WHERE Elo.item_id = OLD.item_id AND Elo.category_id = OLD.category_id;
-END //
+END ;
 
-DROP TRIGGER IF EXISTS category_concept_propagator //
+DROP TRIGGER IF EXISTS category_concept_propagator ;
 CREATE TRIGGER category_concept_propagator
     AFTER INSERT ON Category_concepts
     FOR EACH ROW
@@ -162,13 +152,12 @@ BEGIN
     INSERT INTO Elo
     SELECT  NULL, Ci.item_id, NEW.category_id, NEW.concept_id, 1500
     FROM (SELECT Ci.item_id FROM Category_items Ci WHERE  Ci.category_id = NEW.category_id) as Ci;
-END //
+END ;
 
-DROP TRIGGER IF EXISTS category_concept_delinker //
+DROP TRIGGER IF EXISTS category_concept_delinker ;
 CREATE TRIGGER category_concept_delinker
     AFTER DELETE ON Category_concepts
     FOR EACH ROW
 BEGIN
     DELETE FROM Elo WHERE Elo.category_id = OLD.category_id AND Elo.concept_id = OLD.concept_id;
-END //
-DELIMITER ;
+END ;
