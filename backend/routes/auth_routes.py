@@ -4,7 +4,6 @@ from flask import jsonify
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import create_access_token, jwt_required
 from database.database import connect_db, get_cursor
-import uuid
 import hashlib
 import time
 import json
@@ -20,17 +19,16 @@ class UserRegister(Resource):
         try:
             db = connect_db()
             cursor = get_cursor(db)
-            cursor.execute("SELECT * FROM User WHERE name=%s", (data.username,))
+            cursor.execute("SELECT * FROM User WHERE username=%s", (data.username,))
             result = cursor.fetchall()
             if result:
                 return {"message": "User with this username is already register."}, 409
-            id = str(uuid.uuid4())
             hash_password = hashlib.md5(data.password.encode("utf-8")).hexdigest()
             date_now = time.strftime("%Y-%m-%d %H:%M:%S")
             cursor.execute(
-                "INSERT INTO User (id, name, password) VALUES (%s, %s, %s)",
+                "INSERT INTO User (id, username, password) VALUES (%s, %s, %s)",
                 (
-                    id,
+                    0,
                     data.username,
                     hash_password,
                 ),
@@ -54,7 +52,7 @@ class UserLogin(Resource):
         try:
             db = connect_db()
             cursor = get_cursor(db)
-            cursor.execute("SELECT * FROM User WHERE name=%s", (data.username,))
+            cursor.execute("SELECT * FROM User WHERE username=%s", (data.username,))
             result = cursor.fetchall()
             if not result:
                 return {"message": "Bad combinaison of password and username."}, 401
@@ -64,14 +62,14 @@ class UserLogin(Resource):
                 return {"message": "Bad combinaison of password and username."}, 401
             user = {
                 "id": result[0][0],
-                "name": result[0][1],
+                "username": result[0][1],
                 "match_nb": str(result[0][3]),
                 "average": str(result[0][4]),
                 "favorite_category_id": result[0][5],
                 "created_at": result[0][6],
                 "updated_at": result[0][7],
             }
-            access_token = create_access_token({"id": user["id"], "name": user["name"]})
+            access_token = create_access_token({"id": user["id"], "username": user["username"]})
             return jsonify(user=user, access_token=access_token)
         except Exception as e:
             print(e)
