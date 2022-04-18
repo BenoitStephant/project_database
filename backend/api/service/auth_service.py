@@ -29,8 +29,8 @@ class AuthService:
         user = {
             "id": user[0][0],
             "username": user[0][1],
-            "match_nb": str(user[0][3]),
-            "average": str(user[0][4]),
+            "match_nb": user[0][3],
+            "average": user[0][4],
             "favorite_category_id": user[0][5],
             "created_at": user[0][6],
             "updated_at": user[0][7],
