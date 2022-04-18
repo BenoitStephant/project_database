@@ -165,8 +165,32 @@ BEGIN
 SELECT * FROM Category;
 END;
 
+DROP PROCEDURE IF EXISTS create_category;
+CREATE PROCEDURE create_category(IN title VARCHAR(30), IN description VARCHAR(255), IN image_url VARCHAR(255))
+BEGIN
+    INSERT INTO Category (`id`, `title`, `description`, `image_url`) VALUES (0, title, description, image_url);
+END;
+
 DROP PROCEDURE IF EXISTS get_favorite_category;
 CREATE PROCEDURE get_favorite_category(IN user_id VARCHAR(36))
 BEGIN
 SELECT * FROM Category WHERE id = (SELECT favorite_category_id FROM User WHERE id = user_id);
+END;
+
+DROP PROCEDURE IF EXISTS create_concept;
+CREATE PROCEDURE create_concept(IN name VARCHAR(30))
+BEGIN
+INSERT INTO Concept (`id`, `name`) VALUES (0, name);
+END;
+
+DROP PROCEDURE IF EXISTS get_concepts;
+CREATE PROCEDURE get_concepts()
+BEGIN
+SELECT * FROM Concept;
+END;
+
+DROP PROCEDURE IF EXISTS get_concept_by_name;
+CREATE PROCEDURE get_concept_by_name(IN name VARCHAR(30))
+BEGIN
+SELECT * FROM Concept WHERE name = name;
 END;

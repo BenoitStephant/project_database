@@ -79,4 +79,5 @@ def training_set_db():
         for _ in cursor.execute(f.read().decode("utf8"), multi=True):
             pass
     cursor.close()
+    db.commit()
     db.close()

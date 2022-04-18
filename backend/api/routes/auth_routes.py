@@ -1,7 +1,4 @@
-from sqlite3 import Cursor
-from flask import Flask
-from flask_restful import Resource, reqparse
-from database.database import connect_db, get_cursor
+from flask_restful import Resource
 from api.controller.auth_controller import AuthController
 
 

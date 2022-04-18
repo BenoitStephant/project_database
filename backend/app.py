@@ -11,6 +11,8 @@ from database.database import init_db, indexes_db, porocedures_db, elo_db, train
 from flask_cors import CORS
 
 from api.routes.auth_routes import UserRegister, UserLogin
+from api.routes.concept_routes import Concept
+from api.routes.category_routes import Category
 
 dotenv_path = join(dirname(__file__), ".env")
 load_dotenv(dotenv_path)
@@ -37,6 +39,8 @@ def index() -> str:
 
 api.add_resource(UserRegister, "/register")
 api.add_resource(UserLogin, "/login")
+api.add_resource(Concept, "/concepts")
+api.add_resource(Category, "/categories")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)

@@ -1,4 +1,3 @@
-USE choose_one;
 INSERT IGNORE INTO Category
 VALUES (NULL, 'Animals', 'The animal kingdom', 'img_url', current_date(), current_date()),
 (NULL, 'Film', 'Pop culture icons', 'img_url', current_date(), current_date()),
