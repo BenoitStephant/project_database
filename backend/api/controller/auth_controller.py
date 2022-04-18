@@ -13,7 +13,7 @@ class AuthController(Resource):
         try:
             db = connect_db()
             cursor = get_cursor(db)
-            cursor.callproc("get_user_by_name", args=(data.username,))
+            cursor.execute("SELECT * FROM User WHERE User.username=%s", (data.username,))
             result = cursor.fetchall()
             if result:
                 return {"message": "User with this username is already register."}, 409
@@ -29,7 +29,7 @@ class AuthController(Resource):
         try:
             db = connect_db()
             cursor = get_cursor(db)
-            cursor.execute("call get_user_by_name(%s)", (data.username,))
+            cursor.execute("SELECT * FROM User WHERE User.username=%s", (data.username,))
             result = cursor.fetchall()
             if not result:
                 return {"message": "Bad combinaison of password and username."}, 401

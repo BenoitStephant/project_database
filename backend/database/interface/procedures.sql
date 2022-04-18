@@ -152,13 +152,6 @@ BEGIN
 SELECT * FROM User WHERE id = user_id;
 END;
 
-
-DROP PROCEDURE IF EXISTS get_user_by_name;
-CREATE PROCEDURE get_user_by_name(IN username VARCHAR(50))
-BEGIN
-SELECT * FROM User WHERE username = username;
-END;
-
 DROP PROCEDURE IF EXISTS get_categories;
 CREATE PROCEDURE get_categories()
 BEGIN
