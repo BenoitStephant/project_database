@@ -34,8 +34,8 @@ services:
       - backend
 
 networks:
-    backend:
+  backend:
 
 volumes:
-    database:
-    backend:
+  database:
+  backend:
