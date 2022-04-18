@@ -4,6 +4,8 @@ from flask_jwt_extended import jwt_required
 
 
 class Match(Resource):
-    @jwt_required()
     def get(self):
         return MatchController.get()
+
+    def post(self):
+        return MatchController.match_log()

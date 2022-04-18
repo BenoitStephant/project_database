@@ -42,3 +42,9 @@ class MatchService:
             },
         ]
         return jsonify(category=category, concept=concept, items=items)
+
+    def match_log(category_id, concept_id, item_0_id, item_1_id, winner, user_id, db, cursor):
+        print("enter")
+        cursor.callproc("play_match", (item_0_id, item_1_id, category_id, concept_id, winner, user_id))
+        db.commit()
+        return {"Message": "Match was played"}
