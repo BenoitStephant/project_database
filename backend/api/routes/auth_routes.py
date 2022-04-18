@@ -4,42 +4,15 @@ from flask import jsonify
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import create_access_token, jwt_required
 from database.database import connect_db, get_cursor
+from api.controller.auth_controller import AuthController
 import hashlib
 import time
 import json
 
 
 class UserRegister(Resource):
-    parser = reqparse.RequestParser()
-    parser.add_argument("username", type=str, required=True, help="Can't be empty")
-    parser.add_argument("password", type=str, required=True, help="Can't be empty")
-
     def post(self):
-        data = UserRegister.parser.parse_args()
-        try:
-            db = connect_db()
-            cursor = get_cursor(db)
-            cursor.execute("SELECT * FROM User WHERE username=%s", (data.username,))
-            result = cursor.fetchall()
-            if result:
-                return {"message": "User with this username is already register."}, 409
-            hash_password = hashlib.md5(data.password.encode("utf-8")).hexdigest()
-            date_now = time.strftime("%Y-%m-%d %H:%M:%S")
-            cursor.execute(
-                "INSERT INTO User (id, username, password) VALUES (%s, %s, %s)",
-                (
-                    0,
-                    data.username,
-                    hash_password,
-                ),
-            )
-            db.commit()
-            return {"message": "User successfully created."}, 201
-        except Exception as e:
-            print(e)
-        finally:
-            cursor.close()
-            db.close()
+        return AuthController.register()
 
 
 class UserLogin(Resource):
@@ -48,7 +21,7 @@ class UserLogin(Resource):
     parser.add_argument("password", type=str, required=True, help="Can't be empty")
 
     def post(self):
-        data = UserRegister.parser.parse_args()
+        data = UserLogin.parser.parse_args()
         try:
             db = connect_db()
             cursor = get_cursor(db)
