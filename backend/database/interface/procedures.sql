@@ -1,7 +1,7 @@
 DROP PROCEDURE IF EXISTS link_concept_to_category;
 CREATE PROCEDURE link_concept_to_category(IN concept_id INT, category_id INT)
 BEGIN
-   INSERT INTO Category_concepts VALUE(category_id, concept_id);
+   INSERT IGNORE INTO Category_concepts VALUE(category_id, concept_id);
 END ;
 DROP PROCEDURE IF EXISTS unlink_concept_to_category;
 CREATE PROCEDURE unlink_concept_to_category(IN concept_id INT, category_id INT)
@@ -13,7 +13,7 @@ END ;
 DROP PROCEDURE IF EXISTS link_item_to_category;
 CREATE PROCEDURE link_item_to_category(IN item_id INT, category_id INT)
 BEGIN
-   INSERT INTO Category_items VALUE(category_id, item_id);
+   INSERT IGNORE INTO Category_items VALUE(category_id, item_id);
 END ;
 DROP PROCEDURE IF EXISTS unlink_item_to_category;
 CREATE PROCEDURE unlink_item_to_category(IN item_id INT, category_id INT)

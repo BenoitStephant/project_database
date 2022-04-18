@@ -36,3 +36,47 @@ def init_db():
             pass
     cursor.close()
     db.close()
+
+
+def indexes_db():
+    print("Init indexes database........")
+    db = connect_db()
+    cursor = get_cursor(db)
+    with current_app.open_resource("database/indexes.sql") as f:
+        for _ in cursor.execute(f.read().decode("utf8"), multi=True):
+            pass
+    cursor.close()
+    db.close()
+
+
+def porocedures_db():
+    print("Init procedures database........")
+    db = connect_db()
+    cursor = get_cursor(db)
+    with current_app.open_resource("database/interface/procedures.sql") as f:
+        for _ in cursor.execute(f.read().decode("utf8"), multi=True):
+            pass
+    cursor.close()
+    db.close()
+
+
+def elo_db():
+    print("Init elo database........")
+    db = connect_db()
+    cursor = get_cursor(db)
+    with current_app.open_resource("database/interface/elo.sql") as f:
+        for _ in cursor.execute(f.read().decode("utf8"), multi=True):
+            pass
+    cursor.close()
+    db.close()
+
+
+def training_set_db():
+    print("Init training set database........")
+    db = connect_db()
+    cursor = get_cursor(db)
+    with current_app.open_resource("database/dataset/training_set.sql") as f:
+        for _ in cursor.execute(f.read().decode("utf8"), multi=True):
+            pass
+    cursor.close()
+    db.close()

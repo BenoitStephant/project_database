@@ -1,4 +1,4 @@
--- Concepts queried par category
+/* -- Concepts queried par category
 CREATE INDEX category_index ON Category_concepts(category_id);
 -- Items queried par category
 CREATE INDEX category_index ON Category_items(category_id);
@@ -9,4 +9,4 @@ CREATE INDEX elo_category_index ON Elo(category_id);
 CREATE INDEX user_index ON Match_log(user_id);
 -- Often queried
 CREATE INDEX elo_index ON Match_log(elo_id0, elo_id1);
-
+ */
