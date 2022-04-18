@@ -13,6 +13,7 @@ from flask_cors import CORS
 from api.routes.auth_routes import UserRegister, UserLogin
 from api.routes.concept_routes import Concept
 from api.routes.category_routes import Category
+from api.routes.match_routes import Match
 
 dotenv_path = join(dirname(__file__), ".env")
 load_dotenv(dotenv_path)
@@ -41,6 +42,7 @@ api.add_resource(UserRegister, "/register")
 api.add_resource(UserLogin, "/login")
 api.add_resource(Concept, "/concepts")
 api.add_resource(Category, "/categories")
+api.add_resource(Match, "/match")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
