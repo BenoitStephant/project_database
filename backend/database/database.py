@@ -24,7 +24,7 @@ def connect_db():
 
 
 def get_cursor(db):
-    return db.cursor()
+    return db.cursor(buffered=True)
 
 
 def init_db():

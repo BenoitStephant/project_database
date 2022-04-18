@@ -1,4 +1,3 @@
-from typing import final
 from flask_restful import Resource, reqparse
 from api.service.concept_service import ConceptService
 
