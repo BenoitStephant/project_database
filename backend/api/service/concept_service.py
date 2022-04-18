@@ -4,7 +4,7 @@ class ConceptService:
         return {"message": "Concept Successfuly create"}
 
     def find_all(db, cursor):
-        cursor.execute("call get_concepts()")
+        cursor.execute("SELECT * FROM Concept")
         concepts = []
         for row in cursor.fetchall():
             print(row[0])
