@@ -23,14 +23,14 @@ class CategoryController(Resource):
             cursor.close()
             db.close()
 
-    # def find_all():
-    #     try:
-    #         db = connect_db()
-    #         cursor = get_cursor(db)
-    #         return ConceptService.find_all(db, cursor)
-    #     except Exception as e:
-    #         print(e)
-    #         return {"Error message": "Internal Error."}
-    #     finally:
-    #         cursor.close()
-    #         db.close()
+    def find_all():
+        try:
+            db = connect_db()
+            cursor = get_cursor(db)
+            return CategoryService.find_all(db, cursor)
+        except Exception as e:
+            print(e)
+            return {"Error message": "Internal Error."}
+        finally:
+            cursor.close()
+            db.close()
