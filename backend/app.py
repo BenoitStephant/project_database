@@ -15,6 +15,7 @@ from api.routes.concept_routes import Concept
 from api.routes.category_routes import Category
 from api.routes.match_routes import Match
 from api.routes.user_routes import User, UserPrivacy, UserMatch
+from api.routes.item_routes import Item
 
 dotenv_path = join(dirname(__file__), ".env")
 load_dotenv(dotenv_path)
@@ -47,6 +48,7 @@ api.add_resource(Match, "/match")
 api.add_resource(User, "/users")
 api.add_resource(UserPrivacy, "/users/privacy")
 api.add_resource(UserMatch, "/users/matches")
+api.add_resource(Item, "/items")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
