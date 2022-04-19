@@ -13,3 +13,9 @@ class UserPrivacy(Resource):
     @jwt_required()
     def post(self):
         return UserController.change_privacy()
+
+
+class UserMatch(Resource):
+    @jwt_required()
+    def get(self):
+        return UserController.get_match()

@@ -25,6 +25,39 @@ class UserService:
                 del user["favorite_category_id"]
         return jsonify(user=user)
 
+    def get_match(page_limit, page, db, cursor):
+        jwt_user_id = get_jwt_identity()["id"]
+        cursor.callproc(
+            "get_match_log",
+            (
+                jwt_user_id,
+                page,
+                page_limit,
+            ),
+        )
+        for result in cursor.stored_results():
+            rows = result.fetchall()
+        matches = []
+        for row in rows:
+            print(row)
+            matches.append(
+                {
+                    "id": row[0],
+                    "user_id": row[1],
+                    "category": row[2],
+                    "concepts": row[3],
+                    "item0": row[4],
+                    "item1": row[5],
+                    "eloBefore0": row[6],
+                    "eloBefore1": row[7],
+                    "winner": row[8],
+                    "eloAfter0": row[9],
+                    "eloAfter1": row[10],
+                    "match_date": row[12],
+                }
+            )
+        return jsonify(matches=matches)
+
     def change_privacy(favorite_category_id, match_played, db, cursor):
         jwt_user_id = get_jwt_identity()["id"]
         cursor.callproc(
