@@ -44,30 +44,26 @@ END ;
 DROP PROCEDURE IF EXISTS pick_random_category ;
 CREATE PROCEDURE pick_random_category()
 BEGIN
-    -- For an optimized random pick: http:;mysql.rjweb.org/doc.php/random
-    -- Case: AUTO_INCREMENT with gaps, 1 or more rows returned
     -- First select is one-time:
-    SELECT @min := MIN(id),
-           @max := MAX(id)
+    SELECT @min := MIN(id), -- For an optimized random pick: http://mysql.rjweb.org/doc.php/random
+           @max := MAX(id)  -- Case: AUTO_INCREMENT with gaps, 1 or more rows returned
         FROM Category;
     SELECT C.*
         FROM Category C
         JOIN ( SELECT id FROM
-                ( SELECT id
-                    FROM ( SELECT @min + (@max - @min + 1 - 50) * RAND() AS start FROM DUAL ) AS init
-                    JOIN Category y
-                    WHERE    y.id > init.start
+                ( SELECT id FROM ( SELECT @min + (@max - @min + 1 - 50) * RAND() AS start FROM DUAL ) AS init
+                    JOIN Category y WHERE y.id > init.start
                     ORDER BY y.id
-                    LIMIT 50           -- Inflated to deal with gaps
+                    LIMIT 50 -- Inflated to deal with gaps
                 ) z ORDER BY RAND()
-               LIMIT 1                -- number of rows desired (change to 1 if looking for a single row)
+               LIMIT 1 -- number of rows desired (change to 1 if looking for a single row)
              ) r ON C.id = r.id;
 END ;
 
 DROP PROCEDURE IF EXISTS pick_concept_from_category ;
 CREATE PROCEDURE pick_concept_from_category(IN category_id INT)
 BEGIN
-    -- For an optimized random pick: http:;mysql.rjweb.org/doc.php/random
+    -- For an optimized random pick: http://mysql.rjweb.org/doc.php/random
     -- For the purposes of few concepts per category, this should do
     DECLARE random_concept INT;
     SET random_concept = (SELECT concept_id FROM Category_concepts Cc WHERE Cc.category_id = category_id ORDER BY RAND() LIMIT 1);
@@ -77,11 +73,10 @@ END ;
 DROP PROCEDURE IF EXISTS pick_two_items_from_category ;
 CREATE PROCEDURE pick_two_items_from_category(IN category_id INT)
 BEGIN
-    -- For an optimized random pick: http:;mysql.rjweb.org/doc.php/random
+    -- For an optimized random pick: http://mysql.rjweb.org/doc.php/random
     -- For the purposes of few concepts per category, this should do
     SELECT * FROM (SELECT item_id  as id FROM Category_items Ci WHERE Ci.category_id = category_id ORDER BY RAND() LIMIT 2) Ci
         INNER JOIN Item ON Ci.id = Item.id;
-
 END ;
 
 DROP FUNCTION IF EXISTS concept_count;
@@ -109,12 +104,13 @@ END;
 DROP PROCEDURE IF EXISTS query_item_elo;
 CREATE PROCEDURE query_item_elo(category_id INT, page_nb INT, page_size INT, reversed INT(1))
 BEGIN
-DECLARE item_size INT DEFAULT page_size * concept_count(category_id);
+DECLARE item_size INT DEFAULT page_size * concept_count(category_id); -- must return the entire item concept cells
 DECLARE offset INT DEFAULT page_nb * item_size;
 SELECT I.id as item_id, I.name as item_name, I.description, I.image_url, C.id as concept_id, C.name as concept_name, Elo.value
-FROM (SELECT * FROM Elo E WHERE E.category_id = category_id ORDER BY CASE WHEN reversed = 0 THEN E.item_id END ASC,
-                                                                     CASE WHEN reversed != 0 THEN E.item_id END DESC,
-                                                                     E.concept_id LIMIT offset, item_size ) Elo
+FROM (SELECT * FROM Elo E WHERE E.category_id = category_id
+    ORDER BY CASE WHEN reversed = 0 THEN E.item_id END ASC, CASE WHEN reversed != 0 THEN E.item_id END DESC,
+     E.concept_id -- ordered with elo_search_index
+    LIMIT offset, item_size ) Elo
 INNER JOIN Item I ON Elo.item_id = I.id
 INNER JOIN Concept C ON Elo.concept_id = C.id;
 END;
@@ -126,12 +122,12 @@ DECLARE offset INT DEFAULT page_nb * page_size;
 SELECT Ml.id, Ml.user_id, Ca.title, Co.name, I1.name, I2.name, Ml.elo_before0, Ml.elo_before1, Ml.winner, Ml.elo_after0, Ml.elo_after1, Ml.elo_after0 - Ml.elo_before0 AS difference, Ml.created_at
 -- Pas besoin d'ORDER BY date car les tuples sont insert dans cet ordre
 FROM (SELECT * FROM Match_log Ml WHERE Ml.user_id = user_id LIMIT offset, page_size) Ml
-INNER JOIN Elo AS Elo0 ON Ml.elo_id0 = Elo0.id
+INNER JOIN Elo AS Elo0 ON Ml.elo_id0 = Elo0.id -- indexed
 INNER JOIN Elo as Elo1 ON Ml.elo_id1 = Elo1.id
-INNER JOIN Item as I1 ON Elo0.item_id = I1.id
+INNER JOIN Item as I1 ON Elo0.item_id = I1.id -- indexed
 INNER JOIN Item as I2 ON Elo1.item_id = I2.id
-INNER JOIN Concept Co on Elo0.concept_id = Co.id
-INNER JOIN Category Ca on Elo0.category_id = Ca.id;
+INNER JOIN Concept Co on Elo0.concept_id = Co.id -- indexed
+INNER JOIN Category Ca on Elo0.category_id = Ca.id; -- indexed
 END ;
 
 DROP PROCEDURE IF EXISTS get_privacy;
