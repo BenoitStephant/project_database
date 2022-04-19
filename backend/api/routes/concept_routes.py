@@ -8,6 +8,5 @@ class Concept(Resource):
     def post(self):
         return ConceptController.create()
 
-    @jwt_required()
     def get(self):
         return ConceptController.find_all()

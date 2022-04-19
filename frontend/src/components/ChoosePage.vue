@@ -3,20 +3,47 @@
     <div class="match_ui">
       <div class="match_header">
         <div class="match_category">Category</div>
+        <select
+          name="category_combobox"
+          id="categoriesBox"
+          @change="onCategoryChange($event)"
+          v-model="selectedCategory"
+        >
+          <option
+            v-for="category in categories"
+            :value="category.id"
+            :key="category.id + category.name"
+          >
+            {{ category.name }}
+          </option>
+        </select>
         <hr />
         <div class="match_concept">Concept</div>
+        <div class="match_concept_name">
+          {{ currentMatch.concept.name }}
+        </div>
       </div>
       <div class="match_content">
         <div class="match_choice">
-          <img class="match_image" alt="Dog" src="../assets/logo.png" />
-          <div class="choice_name">Dog</div>
-          <button>choose 1</button>
+          <img
+            class="match_image"
+            alt="Dog"
+            v-bind:src="currentMatch.items[0].image_url"
+          />
+          <div class="choice_name">{{ currentMatch.items[0].name }}</div>
+          <p class="choice_desc">{{ currentMatch.items[0].description }}</p>
+          <button @click="onChooseButton(0)">choose 1</button>
         </div>
         <div class="vhr"></div>
         <div class="match_choice">
-          <img class="match_image" alt="Cat" src="../assets/logo.png" />
-          <div class="choice_name">Cat</div>
-          <button>choose 2</button>
+          <img
+            class="match_image"
+            alt="Cat"
+            v-bind:src="currentMatch.items[1].image_url"
+          />
+          <div class="choice_name">{{ currentMatch.items[1].name }}</div>
+          <p class="choice_desc">{{ currentMatch.items[1].description }}</p>
+          <button @click="onChooseButton(1)">choose 2</button>
         </div>
       </div>
       <div class="match_footer"></div>
@@ -26,9 +53,91 @@
 </template>
 
 <script>
-export default {
+import { state } from "../store";
+import { defineComponent } from "vue";
+
+async function onCategoryChange(event) {
+  this.selectedCategory = event.target.value;
+  try {
+    this.currentMatch = await this.axios
+      .get(state.api + "match", {
+        params: { category_id: this.selectedCategory },
+      })
+      .then((res) => res.data);
+  } catch (error) {
+    console.log(error);
+  }
+  console.log(this.selectedCategory);
+  console.log(this.currentMatch);
+}
+
+async function onChooseButton(winner) {
+  try {
+    this.success = await this.axios
+      .post(state.api + "match", {
+        category_id: this.selectedCategory,
+        concept_id: this.currentMatch.concept.id,
+        item_0_id: this.currentMatch.items[0].id,
+        item_1_id: this.currentMatch.items[1].id,
+        winner: winner,
+        user_id: "aaaaa",
+      })
+      .then((res) => {
+        res.data;
+      });
+    console.log(this.success);
+    this.currentMatch = await this.axios
+      .get(state.api + "match", {
+        params: { category_id: this.selectedCategory },
+      })
+      .then((res) => res.data);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export default defineComponent({
   name: "ChoosePage",
-};
+  data: () => ({
+    categories: [
+      { id: 2, name: "Movies" },
+      {
+        id: 1,
+        name: "Animals",
+      },
+      {
+        id: 4,
+        name: "Everyday Objects",
+      },
+      {
+        id: 3,
+        name: "Paintings",
+      },
+    ],
+    loading: true,
+    selectedCategory: 1,
+    currentMatch: {},
+  }),
+  async beforeMount() {
+    try {
+      this.currentMatch = await this.axios
+        .get(state.api + "match", {
+          params: { category_id: this.selectedCategory },
+        })
+        .then((res) => {
+          this.loading = true;
+          return res.data;
+        });
+      console.log(this.currentMatch.category);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  methods: {
+    onCategoryChange,
+    onChooseButton,
+  },
+});
 </script>
 
 <style scoped>
@@ -52,6 +161,9 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   margin: 10px;
+}
+.match_concept_name {
+  font-style: italic;
 }
 .match_choice {
   display: flex;
