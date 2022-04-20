@@ -1,11 +1,11 @@
 INSERT INTO Category
-VALUES (NULL, 'Animals', 'The animal kingdom', 'img_url', current_date(), current_date()),
+VALUES (1, 'Animals', 'The animal kingdom', 'img_url', current_date(), current_date()),
 (NULL, 'Films', 'Pop culture icons', 'img_url', current_date(), current_date()),
 (NULL, 'Books', 'Literary engaging', 'img_url', current_date(), current_date()),
 (NULL, 'Paintings', 'Works of art', 'img_url', current_date(), current_date());
 
 INSERT INTO Concept
-VALUES (NULL, 'Active', CURRENT_DATE()),
+VALUES (1, 'Active', CURRENT_DATE()),
        (NULL, 'Agile', CURRENT_DATE()),
        (NULL, 'Beautiful', CURRENT_DATE()),
        (NULL, 'Calm', CURRENT_DATE()),
@@ -58,7 +58,7 @@ call link_concept_to_category(24,1);
 call link_concept_to_category(25,1);
 
 INSERT INTO Item
-VALUES (NULL, 'Alligator', 'See you later', 'https://animalcorner.org/wp-content/uploads/2015/02/alligator1-1-150x150.jpg', current_date()),
+VALUES (1, 'Alligator', 'See you later', 'https://animalcorner.org/wp-content/uploads/2015/02/alligator1-1-150x150.jpg', current_date()),
     (NULL, 'Armadillo', 'Get the ball rolling', 'https://animalcorner.org/wp-content/uploads/2015/02/armadillo-1-150x150.jpg', current_date()),
     (NULL, 'Puffin', 'Bright beak', 'https://animalcorner.org/wp-content/uploads/2015/02/atlantic-puffin-2-150x150.jpg', current_date()),
     (NULL, 'Axolotl', 'Grows back limbs', 'https://animalcorner.org/wp-content/uploads/2022/04/1024px-Ambystoma_mexicanum_6337857516-7927249-150x150.jpeg', current_date()),
@@ -125,7 +125,7 @@ call link_item_to_category(31, 1);
 -- IMDB Top 25 rated
 
 INSERT INTO Item
-Values(NULL, 'The Shawshank Redemptions', '1994', 'https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_UY67_CR0,0,45,67_AL_.jpg', current_date()),
+Values(32, 'The Shawshank Redemptions', '1994', 'https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_UY67_CR0,0,45,67_AL_.jpg', current_date()),
        (NULL, 'The Godfather', '1972', 'https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_UY67_CR1,0,45,67_AL_.jpg', current_date()),
        (NULL, 'The Dark Knight', '2008', 'https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_UY67_CR0,0,45,67_AL_.jpg', current_date()),
        (NULL, 'The Godfather: Part II', '1974', 'https://m.media-amazon.com/images/M/MV5BMWMwMGQzZTItY2JlNC00OWZiLWIyMDctNDk2ZDQ2YjRjMWQ0XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_UY67_CR1,0,45,67_AL_.jpg', current_date()),
@@ -178,7 +178,7 @@ call link_item_to_category(55, 2);
 call link_item_to_category(56, 2);
 
 INSERT INTO Concept
-VALUES (NULL, 'Absorbing', CURRENT_DATE()),
+VALUES (26, 'Absorbing', CURRENT_DATE()),
        (NULL, 'Ambitious', CURRENT_DATE()),
        (NULL, 'Humorous', CURRENT_DATE()),
        (NULL, 'Compelling', CURRENT_DATE()),
@@ -234,7 +234,7 @@ call link_concept_to_category(50,2);
 -- https://thegreatestbooks.org/
 
 INSERT INTO Item
-Values(NULL, 'In Search of Lost Time', 'Marcel Proust', 'https://d3i5mgdwi2ze58.cloudfront.net/7hqv6ddaqv363p4hadx6lymotow1', current_date()),
+Values(57, 'In Search of Lost Time', 'Marcel Proust', 'https://d3i5mgdwi2ze58.cloudfront.net/7hqv6ddaqv363p4hadx6lymotow1', current_date()),
        (NULL, 'Ulysses', 'James Joyce', 'https://d3i5mgdwi2ze58.cloudfront.net/f7nkbyqfsnrrlct3hs01jkrz2vdi', current_date()),
        (NULL, 'Don Quixote', 'Miguel de Cervantes', 'https://d3i5mgdwi2ze58.cloudfront.net/wa12vserm1jdqg99atu41wflyx2c', current_date()),
        (NULL, 'One Hundred Years of Solitude', 'Gabriel Marquez', 'https://d3i5mgdwi2ze58.cloudfront.net/j7koelfcv0va5zky4x1ccmpsgcsb', current_date()),
@@ -287,7 +287,7 @@ call link_item_to_category(80, 3);
 call link_item_to_category(81, 3);
 
 INSERT INTO Concept
-VALUES (NULL, 'Absorbing', CURRENT_DATE()),
+VALUES (51, 'Absorbing', CURRENT_DATE()),
        (NULL, 'Ambitious', CURRENT_DATE()),
        (NULL, 'Humorous', CURRENT_DATE()),
        (NULL, 'Compelling', CURRENT_DATE()),
@@ -342,7 +342,7 @@ call link_concept_to_category(75,3);
 -- https://www.ranker.com/list/best-paintings-all-time/ranker-art
 
 INSERT INTO Item
-VALUES (NULL, 'The Starry Night', 'vincent van Gogh', 'https://imgix.ranker.com/user_node_img/112/2223028/original/the-starry-night-photo-u4?auto=format&q=60&fit=crop&fm=pjpg&dpr=2&w=650', current_date()),
+VALUES (82, 'The Starry Night', 'vincent van Gogh', 'https://imgix.ranker.com/user_node_img/112/2223028/original/the-starry-night-photo-u4?auto=format&q=60&fit=crop&fm=pjpg&dpr=2&w=650', current_date()),
         (NULL, 'The Creation of Adam', 'Michelangelo', 'https://imgix.ranker.com/user_node_img/110/2185637/original/the-creation-of-adam-photo-u4?auto=format&q=60&fit=crop&fm=pjpg&dpr=2&w=650', current_date()),
        (NULL, 'Girl with a Pearl Earring', 'Johannes Vermeer', 'https://imgix.ranker.com/user_node_img/188/3753746/original/girl-with-a-pearl-earring-photo-u3?auto=format&q=60&fit=crop&fm=pjpg&dpr=2&w=650', current_date()),
        (NULL, 'The Last Supper', 'Leonardo da Vinci', 'https://imgix.ranker.com/user_node_img/125/2486197/original/the-last-supper-photo-u5?auto=format&q=60&fit=crop&fm=pjpg&dpr=2&w=650', current_date()),
@@ -395,34 +395,7 @@ call link_item_to_category(105, 4);
 call link_item_to_category(106, 4);
 
 INSERT INTO Concept
-VALUES (NULL, 'Absorbing', CURRENT_DATE()),
-       (NULL, 'Ambitious', CURRENT_DATE()),
-       (NULL, 'Humorous', CURRENT_DATE()),
-       (NULL, 'Compelling', CURRENT_DATE()),
-       (NULL, 'Gripping', CURRENT_DATE()),
-       (NULL, 'Mysterious', CURRENT_DATE()),
-       (NULL, 'Surprising', CURRENT_DATE()),
-       (NULL, 'Tragic', CURRENT_DATE()),
-       (NULL, 'Interesting', CURRENT_DATE()),
-       (NULL, 'Romantic', CURRENT_DATE()),
-       (NULL, 'Inventive', CURRENT_DATE()),
-       (NULL, 'Powerful', CURRENT_DATE()),
-       (NULL, 'Historical', CURRENT_DATE()),
-       (NULL, 'Plot-driven', CURRENT_DATE()),
-       (NULL, 'Realistic', CURRENT_DATE()),
-       (NULL, 'Meaningful', CURRENT_DATE()),
-       (NULL, 'Moving', CURRENT_DATE()),
-       (NULL, 'Emotional', CURRENT_DATE()),
-       (NULL, 'Coherent', CURRENT_DATE()),
-       (NULL, 'Timeless', CURRENT_DATE()),
-       (NULL, 'Unique', CURRENT_DATE()),
-       (NULL, 'Evocative', CURRENT_DATE()),
-       (NULL, 'Bold', CURRENT_DATE()),
-       (NULL, 'Ironic', CURRENT_DATE()),
-       (NULL, 'Daring', CURRENT_DATE());
-
-INSERT INTO Concept
-VALUES (NULL, 'Absorbing', CURRENT_DATE()),
+VALUES (76, 'Absorbing', CURRENT_DATE()),
        (NULL, 'Ambitious', CURRENT_DATE()),
        (NULL, 'Humorous', CURRENT_DATE()),
        (NULL, 'Compelling', CURRENT_DATE()),
