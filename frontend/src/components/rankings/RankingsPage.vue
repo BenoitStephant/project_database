@@ -39,6 +39,7 @@
         </div>
       </div>
       <table-lite
+        v-if="!loadingB"
         :is-slot-mode="true"
         :is-static-mode="true"
         :columns="table.columns"
@@ -54,6 +55,7 @@
 <script>
 import TableLite from "vue3-table-lite";
 import { reactive, defineComponent } from "vue";
+import { state } from "../../store";
 
 function onCategoryChange(event) {
   this.selectedCategory = this.categories.findIndex(function (item) {
@@ -107,6 +109,8 @@ export default defineComponent({
           themes: ["emotion", "appreciation"],
         },
       ],
+      concepts: [],
+      loadingB: true,
 
       //This is fetched from the DB on theme selection
       categoryContent: {
@@ -130,15 +134,25 @@ export default defineComponent({
       selectedTheme: "",
     };
   },
-  setup() {
-    const data = reactive([]);
-    for (let i = 0; i < 126; i++) {
-      data.push({
-        id: i,
-        name: "TEST" + i,
-        email: "test" + i + "@example.com",
+  async beforeMount() {
+    try {
+      // this.categories = await this.axios
+      //   .get(state.api + "categories")
+      //   .then((res) => {
+      //     this.loadingA = false;
+      //     return res.data
+      //   });
+      this.table.rows = await this.axios.get(state.api + "concepts").then((res) => {
+        this.loadingB = false;
+        return res.data;
       });
+      this.table.totalRecordCount = this.table.rows.length;
+    } catch (error) {
+      const err = error;
+      this.error = "Serveur error:" + err.message;
     }
+  },
+  setup() {
     // Table config
     const table = reactive({
       columns: [
@@ -156,14 +170,14 @@ export default defineComponent({
           sortable: true,
         },
         {
-          label: "Email",
-          field: "email",
+          label: "Date",
+          field: "created_at",
           width: "15%",
           sortable: true,
         },
       ],
-      rows: data,
-      totalRecordCount: data.length,
+      rows: [{ id: 0, name: "bob", created_at: "2" }],
+      totalRecordCount: 1,
       sortable: {
         order: "id",
         sort: "asc",

@@ -3,13 +3,30 @@
     <form @submit="login()" @submit.prevent>
       <h1>Register</h1>
       <div>
-        <input required type="string" placeholder="Username" v-model="username" />
+        <input
+          required
+          type="string"
+          placeholder="Username"
+          v-model="username"
+        />
       </div>
       <div>
-        <input required type="password" placeholder="Password" v-model="password" @input="verifyPass()"/>
+        <input
+          required
+          type="password"
+          placeholder="Password"
+          v-model="password"
+          @input="verifyPass()"
+        />
       </div>
       <div>
-        <input required type="password" placeholder="PasswordCheck" v-model="passwordCheck" @input="verifyPass()" />
+        <input
+          required
+          type="password"
+          placeholder="PasswordCheck"
+          v-model="passwordCheck"
+          @input="verifyPass()"
+        />
       </div>
       <div v-if="error">
         {{ error }}
@@ -39,7 +56,7 @@ export default {
       this.success = false;
       this.error = null;
 
-      if (this.password != this.passwordCheck){
+      if (this.password != this.passwordCheck) {
         this.error = "Password not identical !";
         return;
       }
@@ -51,20 +68,29 @@ export default {
         this.success = true;
         console.log(res);
         this.$router.push({ name: "Login" });
-      } catch (err) {
-        this.error = err.message;
+      } catch (error) {
+        const err = error;
+        this.error = err.response.data.message;
       }
     },
-    verifyPass: function() {
-      if (this.password != this.passwordCheck){
+    verifyPass: function () {
+      if (this.password != this.passwordCheck) {
         this.error = "Password not identical !";
         return;
       } else {
         this.error = null;
       }
-    }
+    },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.register_page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 70px);
+}
+</style>

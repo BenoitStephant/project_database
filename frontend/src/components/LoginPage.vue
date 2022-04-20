@@ -40,17 +40,27 @@ export default {
           .post(state.api + "login", auth)
           .then((res) => res.data);
         this.success = true;
+        mutations.setUserId(res.user.id);
         this.axios.defaults.headers.common = {
           Authorization: "Bearer " + res.access_token,
         };
         mutations.setLogin(true);
         this.$router.push({ name: "Profile"})
-      } catch (err) {
-        this.error = err.message;
+      } catch (error) {
+        const err = error;
+        this.error = err.response.data.message;
       }
     },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.login_page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 70px);
+}
+</style>
