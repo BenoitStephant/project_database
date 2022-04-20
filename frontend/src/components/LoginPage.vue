@@ -40,6 +40,7 @@ export default {
           .post(state.api + "login", auth)
           .then((res) => res.data);
         this.success = true;
+        mutations.setUserId(res.user.id);
         this.axios.defaults.headers.common = {
           Authorization: "Bearer " + res.access_token,
         };

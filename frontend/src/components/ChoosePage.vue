@@ -1,6 +1,6 @@
 <template>
   <div class="choose_page">
-    <div class="match_ui">
+    <div v-if="isLogged" class="match_ui">
       <div class="match_header">
         <div class="match_category">Category</div>
         <select
@@ -46,9 +46,9 @@
           <button @click="onChooseButton(1)">choose 2</button>
         </div>
       </div>
-      <div class="match_footer"></div>
-      <button>I can't choose</button>
+      <button @click="onCantChoose()">I can't choose</button>
     </div>
+    <div v-else>Please login</div>
   </div>
 </template>
 
@@ -80,7 +80,7 @@ async function onChooseButton(winner) {
         item_0_id: this.currentMatch.items[0].id,
         item_1_id: this.currentMatch.items[1].id,
         winner: winner,
-        user_id: "aaaaa",
+        user_id: "4fb037c4-4b00-447b-9f68-2f546af63f4f",
       })
       .then((res) => {
         res.data;
@@ -96,46 +96,55 @@ async function onChooseButton(winner) {
   }
 }
 
+async function onCantChoose() {
+  try {
+    this.currentMatch = await this.axios
+      .get(state.api + "match", {
+        params: { category_id: this.selectedCategory },
+      })
+      .then((res) => res.data);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export default defineComponent({
   name: "ChoosePage",
   data: () => ({
-    categories: [
-      { id: 2, name: "Movies" },
-      {
-        id: 1,
-        name: "Animals",
-      },
-      {
-        id: 4,
-        name: "Everyday Objects",
-      },
-      {
-        id: 3,
-        name: "Paintings",
-      },
-    ],
+    categories: [],
     loading: true,
     selectedCategory: 1,
     currentMatch: {},
+    isLogged: state.isLogged,
   }),
   async beforeMount() {
-    try {
-      this.currentMatch = await this.axios
-        .get(state.api + "match", {
-          params: { category_id: this.selectedCategory },
-        })
-        .then((res) => {
-          this.loading = true;
-          return res.data;
-        });
-      console.log(this.currentMatch.category);
-    } catch (error) {
-      console.log(error);
+    if (!state.isLogged) {
+      this.$router.push({ name: "Login" });
+    } else {
+      try {
+        this.currentMatch = await this.axios
+          .get(state.api + "match", {
+            params: { category_id: this.selectedCategory },
+          })
+          .then((res) => {
+            this.loading = true;
+            return res.data;
+          });
+        this.categories = await this.axios
+          .get(state.api + "categories")
+          .then((res) => {
+            this.loading = true;
+            return res.data.categories;
+          });
+      } catch (error) {
+        console.log(error);
+      }
     }
   },
   methods: {
     onCategoryChange,
     onChooseButton,
+    onCantChoose,
   },
 });
 </script>
@@ -164,6 +173,9 @@ export default defineComponent({
 }
 .match_concept_name {
   font-style: italic;
+}
+.match_footer {
+  background-color: aqua;
 }
 .match_choice {
   display: flex;
