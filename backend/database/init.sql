@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS User (
 
 CREATE TABLE IF NOT EXISTS Item (
     id INT NOT NULL AUTO_INCREMENT,
-    name CHAR(30) NOT NULL,
+    name CHAR(100) NOT NULL,
     description VARCHAR(255) NOT NULL,
     image_url VARCHAR(255) NOT NULL,
     created_at DATE NOT NULL,

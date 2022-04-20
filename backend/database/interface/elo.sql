@@ -1,13 +1,13 @@
 USE choose_one;
 DROP FUNCTION IF EXISTS calculate_rating_change;
-CREATE FUNCTION calculate_rating_change(elo0 INT, elo1 INT, score DECIMAL(2,1))
+CREATE FUNCTION calculate_rating_change(elo0 INT, elo1 INT, score DECIMAL(2,1)) -- score: 1 win, 0.5 tie 0 loss
 RETURNS INT
 DETERMINISTIC NO SQL
 BEGIN
-	DECLARE rating_change INT;
-    DECLARE maximal_change INT DEFAULT 32;
-    DECLARE elo_difference_for_10_times_more_likely INT DEFAULT 400;
-    DECLARE win_probability DECIMAL(5,4);
+	DECLARE rating_change INT;  -- The final modified
+    DECLARE maximal_change INT DEFAULT 32; -- arbitrarily chosen, same value as the original paper
+    DECLARE elo_difference_for_10_times_more_likely INT DEFAULT 400; -- same as original system
+    DECLARE win_probability DECIMAL(5,4); -- higher elo has a higher chance to win
     SET win_probability = 1 / (1 +
 								POWER(10, ((elo1 - elo0)/elo_difference_for_10_times_more_likely))
                                 );
@@ -22,7 +22,7 @@ DETERMINISTIC CONTAINS SQL
 BEGIN
     DECLARE fav INT;
     SELECT category_id FROM (SELECT E.category_id FROM (SELECT elo_id0 FROM Match_log Ml WHERE Ml.user_id = user_id) Ml
-                                                        INNER JOIN Elo E ON Ml.elo_id0 = E.id) Ml
+                                                        INNER JOIN Elo E ON Ml.elo_id0 = E.id) Ml -- user_id is indexed
     GROUP BY category_id ORDER BY COUNT(category_id) DESC LIMIT 1
     INTO fav;
     RETURN fav;
@@ -33,7 +33,7 @@ CREATE FUNCTION calculate_average_win(average DECIMAL(8,7), match_played INT(4),
 RETURNS DECIMAL(8,7)
 DETERMINISTIC NO SQL
 BEGIN
-    RETURN ((average * match_played) + chose_right) / (match_played + 1);
+    RETURN ((average * match_played) + chose_right) / (match_played + 1); -- utility function for readability
 END;
 
 DROP PROCEDURE IF EXISTS play_match ;
@@ -49,18 +49,18 @@ BEGIN
     DECLARE elo_id1 INT;
     DECLARE user_chose_right INT(1) DEFAULT 1;
 
-    SELECT value, Elo.id INTO elo0, elo_id0  FROM Elo
+    SELECT value, Elo.id INTO elo0, elo_id0  FROM Elo -- indexed in this order
         WHERE item_id0 = Elo.item_id AND concept_id = Elo.concept_id AND category_id = Elo.category_id;
-    SELECT value, Elo.id INTO elo1, elo_id1 FROM Elo
+    SELECT value, Elo.id INTO elo1, elo_id1 FROM Elo -- indexed in this order
         WHERE item_id1 = Elo.item_id AND concept_id = Elo.concept_id AND category_id = Elo.category_id;
 
-    IF elo_id0 IS NULL OR elo_id1 IS NULL THEN
+    IF elo_id0 IS NULL OR elo_id1 IS NULL THEN -- could not find matching elo_id
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'No record matches this Category, concept and item combination';
     END IF;
 
 
     SET rating_change = calculate_rating_change(elo0, elo1, score);
-    SET elo_after0 = elo0 + rating_change;
+    SET elo_after0 = elo0 + rating_change; -- equal exchange
     SET elo_after1 = elo1 - rating_change;
     UPDATE Elo
         SET value = elo_after0
@@ -84,6 +84,7 @@ BEGIN
         WHERE U.id = user_id;
         -- Just to be safe in update ordering, the query itself is cheap because it's the primary index
         UPDATE User U SET U.match_played = U.match_played + 1 WHERE U.id = user_id;
+        -- Speed tradeoff of frontend page fetch speed vs match write speed, fetch speed was prioritized
         UPDATE User U SET U.favorite_category_id = calculate_favorite_category(user_id) WHERE U.id = user_id;
     END IF;
 END;
