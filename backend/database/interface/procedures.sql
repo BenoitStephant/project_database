@@ -172,6 +172,13 @@ BEGIN
 INSERT INTO Concept (`id`, `name`) VALUES (0, name);
 END;
 
+DROP PROCEDURE IF EXISTS get_concepts_from_catgory;
+CREATE PROCEDURE get_concept_from_catgory(IN category_id INT)
+BEGIN
+   SELECT category_id, Concept.* FROM Concept
+       INNER JOIN Category_concepts Cc ON Cc.category_id = category_id;
+END;
+
 DROP PROCEDURE IF EXISTS get_concepts;
 CREATE PROCEDURE get_concepts()
 BEGIN
